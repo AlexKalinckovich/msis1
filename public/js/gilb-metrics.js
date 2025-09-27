@@ -35,6 +35,7 @@ export function calculateGilbMetrics(code) {
         'for_expression',
         'while_expression',
         'case_clause',
+        'do_while_expression',
         'guard'
     ]);
 
@@ -63,6 +64,14 @@ export function calculateGilbMetrics(code) {
                     cl++;
                 }
                 handleIfExpression(node, currentNesting, inElseBranch);
+                return;
+            } else if(nodeType === 'while_expression' || nodeType === 'do_while_expression') {
+                cl++;
+                handleWhileExpression(node, currentNesting);
+                return;
+            } else if(nodeType === 'for_expression') {
+                cl++;
+                handleForExpression(node, currentNesting);
                 return;
             } else {
                 cl++;
