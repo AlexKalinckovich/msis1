@@ -14,19 +14,12 @@ export function calculateGilbMetrics(code) {
     const processedNodes = new Set();
 
     const statementTypes = new Set([
-        'expression_statement',
-        'val_definition',
-        'var_definition',
-        'function_definition',
         'if_expression',
         'match_expression',
         'for_expression',
         'while_expression',
-        'return_expression',
-        'throw_expression',
-        'try_expression',
-        'assignment_expression',
-        'apply_expression'
+        'case_clause',
+        'else'
     ]);
 
     const conditionalTypes = new Set([
@@ -34,7 +27,6 @@ export function calculateGilbMetrics(code) {
         'match_expression',
         'for_expression',
         'while_expression',
-        'case_clause',
         'do_while_expression',
         'guard'
     ]);
@@ -45,8 +37,7 @@ export function calculateGilbMetrics(code) {
 
         const nodeType = node.type;
 
-        if (statementTypes.has(nodeType) &&
-            !['case_clause'].includes(nodeType)) {
+        if (statementTypes.has(nodeType)) {
             totalStatements++;
         }
 
@@ -56,8 +47,7 @@ export function calculateGilbMetrics(code) {
             if (nodeType === 'match_expression') {
                 const caseClauses = findAllCases(node);
                 cl += Math.max(0, caseClauses.length - 1);
-
-                handleMatchExpression(node, currentNesting + 1);
+                handleMatchExpression(node, currentNesting);
                 return;
             } else if (nodeType === 'if_expression') {
                 if (!inElseBranch) {
@@ -99,6 +89,7 @@ export function calculateGilbMetrics(code) {
 
             if (child.type === 'else') {
                 hasElse = true;
+                totalStatements++;
                 for (let j = 0; j < child.childCount; j++) {
                     const elseChild = child.child(j);
                     if (elseChild.type === 'if_expression') {
@@ -123,7 +114,10 @@ export function calculateGilbMetrics(code) {
 
 
         for (const caseClause of caseClauses) {
-            traverse(caseClause, currentNesting + 1, false);
+            if(!caseClause.children.find(child => child.type === 'wildcard')) {
+                currentNesting++;
+            }
+            traverse(caseClause, currentNesting, false);
         }
 
 
