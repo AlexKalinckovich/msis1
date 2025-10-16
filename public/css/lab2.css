@@ -102,16 +102,6 @@ header p {
     gap: 15px;
 }
 
-.metric-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 6px;
-    border-left: 4px solid #667eea;
-}
-
 .metric-item label {
     font-weight: 600;
     color: #555;
@@ -167,7 +157,43 @@ header p {
     }
 }
 
-/* Анимации */
+.metrics-group {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+.metrics-group h3 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 8px;
+}
+
+.metrics-group .metrics {
+    display: grid;
+    gap: 10px;
+}
+
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: white;
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+    transition: all 0.3s ease;
+}
+
+.metric-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

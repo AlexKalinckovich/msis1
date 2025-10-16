@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import { existsSync } from "node:fs";
 import { calculateGilbMetrics, analyzeCodeStructure } from './gilb-metrics.js';
+import {calculateBoundaryValueMetrics} from "./boundMetrics.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,20 +40,28 @@ app.post('/api/analyze', (req, res) => {
 
         console.log('Анализ кода... Длина:', code.length, 'символов');
 
-        const metrics = calculateGilbMetrics(code);
-
+        const gilbMetrics = calculateGilbMetrics(code);
+        const boundaryMetrics = calculateBoundaryValueMetrics(code);
         const structure = analyzeCodeStructure(code);
 
-        console.log('Результаты анализа:', metrics);
-        console.log('Структура кода:', structure);
+        console.log('Результаты анализа:', {
+            gilb: gilbMetrics,
+            boundary: boundaryMetrics
+        });
 
         res.json({
             success: true,
             metrics: {
-                cl: metrics.cl,
-                clRelative: metrics.clRelative,
-                cli: metrics.cli,
-                totalStatements: metrics.totalStatements
+                cl: gilbMetrics.cl,
+                clRelative: gilbMetrics.clRelative,
+                cli: gilbMetrics.cli,
+                totalStatements: gilbMetrics.totalStatements,
+
+                sa: boundaryMetrics.sa,
+                so: boundaryMetrics.so,
+                totalVertices: boundaryMetrics.totalVertices,
+                choiceVertices: boundaryMetrics.choiceVertices,
+                acceptingVertices: boundaryMetrics.acceptingVertices
             },
             debug: {
                 structure: {
@@ -61,7 +70,6 @@ app.post('/api/analyze', (req, res) => {
                     forExpressions: structure.forExpressions,
                     whileExpressions: structure.whileExpressions,
                     functionDefinitions: structure.functionDefinitions,
-                    caseClauses: structure.caseClauses,
                     totalNodes: structure.totalNodes
                 }
             }
@@ -69,6 +77,7 @@ app.post('/api/analyze', (req, res) => {
 
     } catch (error) {
         console.error('Ошибка при анализе кода:', error);
+
         res.status(500).json({
             error: 'Внутренняя ошибка сервера при анализе кода',
             details: error.message

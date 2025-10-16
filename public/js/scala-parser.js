@@ -97,8 +97,14 @@ class ScalaCodeAnalyzer {
 
         this.updateMetric('cl-result', result.metrics.cl);
         this.updateMetric('cl-relative-result', result.metrics.clRelative);
-        this.updateMetric('cli-result', result.metrics.cli);
+        this.updateMetric('cli-result', result.metrics.cli - 1);
         this.updateMetric('total-statements', result.metrics.totalStatements);
+
+        this.updateMetric('sa-result', result.metrics.sa || '-');
+        this.updateMetric('so-result', result.metrics.so !== undefined ? this.formatNumber(result.metrics.so) : '-');
+        this.updateMetric('total-vertices-result', result.metrics.totalVertices || '-');
+        this.updateMetric('choice-vertices-result', result.metrics.choiceVertices || '-');
+        this.updateMetric('accepting-vertices-result', result.metrics.acceptingVertices || '-');
 
         if (result.debug && result.debug.structure) {
             this.showAdditionalInfo(result.debug.structure);
@@ -114,6 +120,12 @@ class ScalaCodeAnalyzer {
         this.updateMetric('cl-relative-result', fallbackMetrics.clRelative);
         this.updateMetric('cli-result', fallbackMetrics.cli);
         this.updateMetric('total-statements', 'N/A');
+
+        this.updateMetric('sa-result', 'N/A');
+        this.updateMetric('so-result', 'N/A');
+        this.updateMetric('total-vertices-result', 'N/A');
+        this.updateMetric('choice-vertices-result', 'N/A');
+        this.updateMetric('accepting-vertices-result', 'N/A');
     }
 
     updateMetric(elementId, value) {
@@ -123,8 +135,12 @@ class ScalaCodeAnalyzer {
         }
     }
 
+    formatNumber(value, decimals = 3) {
+        if (value === undefined || value === null) return '-';
+        return Number(value).toFixed(decimals);
+    }
+
     showAdditionalInfo(structure) {
-        // Защита от undefined
         if (!structure) {
             console.warn('Structure is undefined');
             return;

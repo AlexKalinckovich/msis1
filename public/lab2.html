@@ -15,24 +15,78 @@
         <button id="analyze-btn">Анализатор кода</button>
     </div>
 
+    <div class="info-section">
+        <h3>Справка по метрикам:</h3>
+
+        <div class="metric-explanation">
+            <h4>Метрики Джилба:</h4>
+            <ul>
+                <li><strong>CL</strong> - количество условных операторов</li>
+                <li><strong>cl</strong> - отношение CL к общему количеству операторов</li>
+                <li><strong>CLI</strong> - максимальный уровень вложенности условных операторов</li>
+            </ul>
+        </div>
+
+        <div class="metric-explanation">
+            <h4>Метрика граничных значений:</h4>
+            <ul>
+                <li><strong>Sa</strong> - абсолютная граничная сложность (сумма скорректированных сложностей вершин)</li>
+                <li><strong>So</strong> - относительная граничная сложность: 1 - (υ-1)/Sa</li>
+                <li><strong>Вершины выбора</strong> - узлы с несколькими путями выполнения (if, match, for, while)</li>
+                <li><strong>Принимающие вершины</strong> - узлы с одним путем выполнения</li>
+            </ul>
+        </div>
+    </div>
+
     <div class="results-section">
         <h2>Результаты анализа</h2>
-        <div class="metrics-grid">
-            <div class="metric-item">
-                <label>Абсолютная сложность (CL):</label>
-                <span id="cl-result">-</span>
+        <div id="error-message" class="error-message" style="display: none;"></div>
+
+        <div class="metrics-group">
+            <h3>Метрики Джилба</h3>
+            <div class="metrics">
+                <div class="metric-item">
+                    <label>Абсолютная сложность (CL):</label>
+                    <span id="cl-result">-</span>
+                </div>
+                <div class="metric-item">
+                    <label>Относительная сложность (cl):</label>
+                    <span id="cl-relative-result">-</span>
+                </div>
+                <div class="metric-item">
+                    <label>Максимальная вложенность (CLI):</label>
+                    <span id="cli-result">-</span>
+                </div>
+                <div class="metric-item">
+                    <label>Всего операторов:</label>
+                    <span id="total-statements-result">-</span>
+                </div>
             </div>
-            <div class="metric-item">
-                <label>Относительная сложность (cl):</label>
-                <span id="cl-relative-result">-</span>
-            </div>
-            <div class="metric-item">
-                <label>Максимальная вложенность (cli):</label>
-                <span id="cli-result">-</span>
-            </div>
-            <div class="metric-item">
-                <label>Всего операторов:</label>
-                <span id="total-statements">-</span>
+        </div>
+
+        <div class="metrics-group">
+            <h3>Метрика граничных значений</h3>
+            <div class="metrics">
+                <div class="metric-item">
+                    <label>Абсолютная граничная сложность (Sa):</label>
+                    <span id="sa-result">-</span>
+                </div>
+                <div class="metric-item">
+                    <label>Относительная граничная сложность (So):</label>
+                    <span id="so-result">-</span>
+                </div>
+                <div class="metric-item">
+                    <label>Всего вершин графа:</label>
+                    <span id="total-vertices-result">-</span>
+                </div>
+                <div class="metric-item">
+                    <label>Вершин выбора:</label>
+                    <span id="choice-vertices-result">-</span>
+                </div>
+                <div class="metric-item">
+                    <label>Принимающих вершин:</label>
+                    <span id="accepting-vertices-result">-</span>
+                </div>
             </div>
         </div>
     </div>
